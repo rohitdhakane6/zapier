@@ -8,14 +8,71 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  name     String?
+  password String?
+  ZapId    Zap[]
+}
+
+model Zap {
+  id      String   @id @default(uuid())
+  name    String
+  userId  Int
+  Trigger Trigger?
+  Action  Action[]
+  UserId  User     @relation(fields: [userId], references: [id])
+  ZapRun  ZapRun[]
+}
+
+model Trigger {
+  id                 String           @id @default(uuid())
+  zapId              String           @unique
+  AvailableTriggerId String
+  type               AvailableTrigger @relation(fields: [AvailableTriggerId], references: [id])
+  ZapId              Zap              @relation(fields: [zapId], references: [id])
+}
+
+model Action {
+  id                String          @id @default(uuid())
+  zapId             String          @unique
+  AvailableActionId String
+  type              AvailableAction @relation(fields: [AvailableActionId], references: [id])
+
+  ZapId Zap @relation(fields: [zapId], references: [id])
+}
+
+model AvailableTrigger {
+  id      String    @id @default(uuid())
+  name    String
+  trigger Trigger[]
+}
+
+model AvailableAction {
+  id     String   @id @default(uuid())
+  name   String
+  action Action[]
+}
+
+model ZapRun {
+  id           String        @id @default(uuid())
+  ZapId        String
+  Zap          Zap           @relation(fields: [ZapId], references: [id])
+  ZapRunOutBox ZapRunOutBox?
+}
+
+model ZapRunOutBox {
+  id       String @id @default(uuid())
+  ZapRunId String @unique
+  ZapRunid ZapRun @relation(fields: [ZapRunId], references: [id])
 }
