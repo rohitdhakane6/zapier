@@ -2,9 +2,14 @@
   "name": "@repo/db",
   "version": "0.0.0",
   "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
     "db:generate": "prisma generate",
-    "migrate":"prisma migrate dev",
-    "studio":"prisma studio",
+    "migrate": "prisma migrate dev",
+    "studio": "prisma studio",
     "db:push": "prisma db push --skip-generate"
   },
   "dependencies": {
@@ -13,9 +18,10 @@
   "devDependencies": {
     "@mermaid-js/mermaid-cli": "^10.9.1",
     "prisma": "^5.18.0",
-    "prisma-erd-generator": "^1.11.2"
+    "prisma-erd-generator": "^1.11.2",
+    "tsup": "^8.2.4"
   },
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./dist/index.js"
   }
 }
