@@ -56,14 +56,12 @@ router.post("/signup", async (req: Request, res: Response) => {
     // Create the new user in the database
     const newUser = await db.user.create({ data: { email, name, password: hashedPassword } });
 
-    // Generate a JWT token
-    const token = generateToken(newUser.id);
+    
 
     // Respond with a success message and token
     return res.status(201).json({
       status: "success",
       message: "User created successfully. Please verify your account by checking your email.",
-      token, // Include the token in the response
     });
   } catch (error) {
     return handleError(error, res);

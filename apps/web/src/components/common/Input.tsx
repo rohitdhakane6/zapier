@@ -1,5 +1,4 @@
-import React from "react";
-
+"use client"
 interface InputProps {
   id?: string;
   type?: string; // Default to text, but can be overridden (e.g., password, email)
@@ -9,6 +8,8 @@ interface InputProps {
   label?: string;
   required?: boolean;
   className?: string;
+  error?: string; // Added for displaying validation errors
+
 }
 
 const Input: React.FC<InputProps> = ({
@@ -20,13 +21,14 @@ const Input: React.FC<InputProps> = ({
   label,
   required = false,
   className = "",
+  error
 }) => {
   return (
     <div className={`flex flex-col  ${className}`}>
       {label && (
-        <label htmlFor={id} className="block mb-2 text-lg font-medium">
-          {required && "* "} 
-          <span className="capitalize">{label}</span> {required && "(Required)"}
+        <label htmlFor={id} className=" block mb-2 text-lg font-medium">
+          
+          <span className={`capitalize ${error ? 'text-red-500':''}`}> {required && "* "}{label}</span> {required && "(Required)"}
         </label>
       )}
       <input
@@ -37,6 +39,8 @@ const Input: React.FC<InputProps> = ({
         onChange={onChange}
         className="w-full p-2 px-3 border border-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
+          {error && <p className="text-red-500 text-sm pt-1">{error}</p>}
+
     </div>
   );
 };
